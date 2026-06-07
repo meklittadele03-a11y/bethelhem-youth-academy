@@ -1,0 +1,68 @@
+BETHELHEM YOUTH ACADEMY PORTAL - INSTALLATION GUIDE
+===================================================
+
+This guide outlines how to build, install, and run the Bethelhem Youth Academy Smart Portal. 
+
+SYSTEM REQUIREMENTS:
+--------------------
+- Node.js LTS (v18.0.0 or v20.0.0+)
+- NPM v9.0.0+
+- Git client
+- Standard web browser (Chrome, Firefox, Safari, or Edge)
+
+---
+
+STEP 1: GET THE RESOURCE CODE
+-----------------------------
+Clone or transfer the source repository.
+$ git clone <repository-url-here>
+$ cd bethelhem-academy-portal
+
+STEP 2: INSTALL NPM BUNDLES
+---------------------------
+Run the standard package installation to download frontend and backend dependencies (configured in package.json):
+$ npm install
+
+This command loads:
+- Frontend components list: React 18/19, Tailwind CSS, Lucide-React, Motion (Framer Motion)
+- Backend services list: Express, JWT validation, tsx compiler, esbuild bundling tools
+
+STEP 3: ENVIRONMENT PREPARATION
+-------------------------------
+1. Copy the sample environment template file to create your active configuration:
+   $ cp .env.example .env
+
+2. Open '.env' in your code editor and customize the parameters:
+   - Make sure PORT is configured correctly if deploying to custom slots (default dev serves on is Port 3000)
+   - Change 'JWT_SECRET' to a high-entropy custom security token
+   - Adjust local database variables if running a separate persistent database
+
+STEP 4: SEED FILE GENERATION
+----------------------------
+Initialize the project dataset storage file (database.json) with fresh default demo values (Admin, Teacher, Student, Parent, subjects, and periods):
+$ node scripts/generate_seed_data.js
+
+STEP 5: RUN DEV MODE
+--------------------
+To run the server locally for testing, use the npm dev command:
+$ npm run dev
+
+This concurrent command:
+- Boots up the Express REST API backend
+- Hooks in the Vite dev server for hot frontend builds
+- Listens on http://localhost:3000 in your browser
+
+STEP 6: COMPILE FOR PRODUCTION
+------------------------------
+To pack the application for standard production deployment (Vercel, Render, or Railway):
+$ npm run build
+
+This task does two things:
+1. Builds the static React frontend SPA into optimizations stored in the /dist folder
+2. Packs the entire Express API backend server into a single robust CommonJS file at /dist/server.cjs utilizing esbuild for fast cold-starts in cloud node runtimes.
+
+To start the production web-service instance, call:
+$ npm run start
+
+===================================================
+For questions or layout extensions, please consult academic advisors or the GitHub repository project wiki.

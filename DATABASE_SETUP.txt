@@ -1,0 +1,57 @@
+BETHELHEM YOUTH ACADEMY PORTAL - DATABASE SETUP GUIDE
+=====================================================
+
+The Bethelhem Academy Portal supports two storage tiers designed to accommodate flexible developmental research and full enterprise publication.
+
+TIER 1: DEVELOPMENT / SIMULATED JSON DATABASE (DEFAULT)
+--------------------------------------------------------
+For rapid testing and simple verification, the portal includes a quick flat-file JSON-based model.
+
+How to initialize:
+1. Run the seed compilation script:
+   $ node scripts/generate_seed_data.js
+
+2. This will read `/server/database.json` and verify its integrity or create a fresh file populated with the required mock students, parents, timetables, and assessments.
+
+3. The backend Express API service will automatically read and write directly to this JSON file during runtime. No complex server installations are required!
+
+
+TIER 2: PRODUCTION RELATIONAL SYSTEM (MYSQL V8.0+)
+--------------------------------------------------
+To transition the research project into a secure multi-user school-wide deployment, follow these step-by-step SQL installation directions.
+
+1. DB Server Authentication:
+   Log into your MySQL instance as root or your database manager user:
+   $ mysql -u root -p
+
+2. Create Database & User:
+   Execute the setup commands:
+   CREATE DATABASE bethelhem_academy_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+   CREATE USER 'bya_admin'@'localhost' IDENTIFIED BY 'bya_secure_pass_2026';
+   GRANT ALL PRIVILEGES ON bethelhem_academy_db.* TO 'bya_admin'@'localhost';
+   FLUSH PRIVILEGES;
+   EXIT;
+
+3. Populate Schema Structures:
+   Import the table schemas defined in '/server/schema.sql' into your active database:
+   $ mysql -u bya_admin -p bethelhem_academy_db < server/schema.sql
+
+4. (Optional) Feed Initial Mock Records:
+   To insert default administrative and academic catalogs, subjects, and sample grades:
+   $ mysql -u bya_admin -p bethelhem_academy_db < server/seed_data.sql
+
+5. Configure App Environment:
+   Update your workspace '.env' file with your MySQL server coordinates:
+   
+   DB_HOST="localhost"
+   DB_USER="bya_admin"
+   DB_PASS="bya_secure_pass_2026"
+   DB_NAME="bethelhem_academy_db"
+   DB_PORT=3306
+
+=====================================================
+RELATIONAL INTEGRITY RULES & SAFETY CHECKS:
+=====================================================
+- Every Student registry requires a valid 'parentId' reference linking back to the Parents table. This enforces family ties for multi-child reporting.
+- Double attendance is locked using a composite unique index on (student_id, date, session). This prevents recording multiple morning or afternoon ticks on the same date.
+- Grade assessments must have a status of 'Approved' for inclusion in computed pupil transcripts or parent-facing views.

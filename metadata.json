@@ -1,0 +1,8 @@
+{
+  "name": "Remix: Bethelhem Youth Academy Portal",
+  "description": "Smart School Management System for Bethelhem Youth Academy, integrating Admin, Teacher, Student, and Parent role-based dashboards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
